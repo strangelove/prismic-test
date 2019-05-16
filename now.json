@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "prismic-test",
+  "builds": [
+      { "src": "next.config.js", "use": "@now/next" }
+  ],
+  "routes": [
+    { "src": "/posts/(?<slug>[^/]+)$", "dest": "/post?slug=$slug" }
+  ]
+}
