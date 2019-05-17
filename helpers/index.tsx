@@ -14,7 +14,7 @@ declare global {
 export const trackPageView = (url: string) => {
   try {
     window.gtag('config', ga_tag, {
-      page_location: url,
+      page_location: url
     })
   } catch (error) {
     // silences the error in dev mode
@@ -25,15 +25,31 @@ export const trackPageView = (url: string) => {
 let frontClient: DefaultClient
 
 export const Client = ({ req }: ApiOptions): DefaultClient => {
-  if (!req && frontClient) { return frontClient } // prevent generate new instance for client side since we don't need the refreshed request object.
+  if (!req && frontClient) {
+    return frontClient
+  } // prevent generate new instance for client side since we don't need the refreshed request object.
   else {
-    const options = {...(req ? {req} : {}), ...(accessToken ? {accessToken} : {})}
+    const options = {
+      ...(req ? { req } : {}),
+      ...(accessToken ? { accessToken } : {})
+    }
     return Prismic.client(apiEndpoint, options)
   }
 }
 
 export const linkResolver = (doc: Document) => {
-  if (doc.type  ===  'homepage') { return  '/' }
-  if (doc.type  ===  'product') { return `/products?uid=${doc.uid}` }
-  else { return  '/' }
+  if (doc.type === 'homepage') {
+    return '/'
+  }
+  if (doc.type === 'page') {
+    return `/${doc.uid}`
+  }
+  if (doc.type === 'blog_post') {
+    return `/blogs/${doc.uid}`
+  }
+  if (doc.type === 'product') {
+    return `/products?uid=${doc.uid}`
+  } else {
+    return '/'
+  }
 }

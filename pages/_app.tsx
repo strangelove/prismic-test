@@ -5,8 +5,8 @@ import React from 'react'
 import { ThemeProvider } from 'styled-components'
 import { default_seo } from '../config.json'
 import { trackPageView } from '../helpers'
-import Defaults from '../styles/defaults'
-import Reset from '../styles/reset'
+import Typography from '../styles/defaults/typography'
+import Reset from '../styles/defaults/reset'
 
 export default class extends App {
   public static async getInitialProps(params: NextAppContext) {
@@ -21,7 +21,7 @@ export default class extends App {
   }
 
   public componentDidMount() {
-    Router.onRouteChangeComplete = (url) => {
+    Router.onRouteChangeComplete = url => {
       trackPageView(url)
     }
   }
@@ -32,7 +32,7 @@ export default class extends App {
       <Container>
         <NextSeo config={default_seo} />
         <Reset />
-        <Defaults />
+        <Typography />
         <ThemeProvider theme={{ color: '#fff' }}>
           <Component {...pageProps} />
         </ThemeProvider>

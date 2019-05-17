@@ -19,6 +19,7 @@
     "next-routes": "^1.4.2",
     "next-seo": "^1.11.2",
     "prismic-javascript": "^2.0.3",
+    "prismic-reactjs": "^0.3.2",
     "prismic-reactjs-custom": "^0.4.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

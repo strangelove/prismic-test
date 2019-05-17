@@ -1,10 +1,12 @@
+import Prismic from 'prismic-javascript'
 import { NextContext } from 'next'
 import { Link, RichTextRenderer } from 'prismic-reactjs-custom'
 import React from 'react'
 import styled from 'styled-components'
 import { Client, linkResolver } from '../helpers'
 import Slices from '../components/slices'
-import Header from '../components/Header';
+import Header from '../components/Header'
+import Navigation from '../components/Navigation'
 
 const Container = styled.div`
   max-width: 980px;
@@ -23,7 +25,8 @@ const HomePageBanner = styled.div<{ src: string }>`
   color: #ffffff;
   line-height: 1.75;
   text-align: center;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${({ src }) => src });
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)),
+    url(${({ src }) => src});
 `
 
 const BannerTitle = styled.h2`
@@ -47,7 +50,7 @@ const BannerDescription = styled.p`
 const BannerButton = styled.a`
   background: #ffffff;
   border-radius: 7px;
-  color: #484D52;
+  color: #484d52;
   font-size: 14px;
   font-weight: 700;
   padding: 15px 40px;
@@ -61,24 +64,34 @@ export default class extends React.Component<{ home: any }> {
     try {
       if (req) {
         const home = await Client({ req }).getSingle('homepage', {})
-        return { home }
+        const menu = await Client({ req }).getSingle('menu', {})
+        return { home, menu }
       }
     } catch (e) {
       console.log(e)
     }
   }
+
   public render() {
-    const { home } = this.props
-    const [ banner ] = home.data.homepage_banner
+    const { home, menu } = this.props
+
+    const [banner] = home.data.homepage_banner
     const buttonLink = Link.url(banner.button_link, linkResolver)
     return (
       <React.Fragment>
+        <Navigation menu={menu} />
         <Header />
         <HomePageBanner src={banner.image.url}>
           <BannerContent>
             <BannerTitle>{RichTextRenderer.asText(banner.title)}</BannerTitle>
-            <BannerDescription>{RichTextRenderer.asText(banner.tagline)}</BannerDescription>
-            {buttonLink && <BannerButton href={buttonLink}>{RichTextRenderer.asText(banner.button_label)}</BannerButton>}
+            <BannerDescription>
+              {RichTextRenderer.asText(banner.tagline)}
+            </BannerDescription>
+            {buttonLink && (
+              <BannerButton href={buttonLink}>
+                {RichTextRenderer.asText(banner.button_label)}
+              </BannerButton>
+            )}
           </BannerContent>
         </HomePageBanner>
         {home.data.page_content.map(Slices)}
